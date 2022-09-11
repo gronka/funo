@@ -1,0 +1,15 @@
+{
+  "@@last_modified": "2020-03-25T15:24:23.779922",
+  "title": "BigBazaar",
+  "@title": {
+    "description": "Application title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "signInText": "Sign in",
+  "@signInText": {
+    "description": "Button you click to sign in",
+    "type": "text",
+    "placeholders": {}
+  }
+}

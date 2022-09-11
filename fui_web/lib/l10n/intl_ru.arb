@@ -1,0 +1,15 @@
+{
+  "@@last_modified": "2020-03-25T15:24:23.779922",
+  "title": "BigBazaar",
+  "@title": {
+    "description": "App title but in russian",
+    "type": "text",
+    "placeholders": {}
+  },
+  "signInText": "Sign in",
+  "@signInText": {
+    "description": "Sign in (russian)",
+    "type": "text",
+    "placeholders": {}
+  }
+}

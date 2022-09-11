@@ -1,0 +1,15 @@
+{
+  "@@last_modified": "2020-03-26T18:51:16.321413",
+  "title": "Fridayy",
+  "@title": {
+    "description": "Application title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "signInText": "Sign in",
+  "@signInText": {
+    "description": "Button you click to sign in",
+    "type": "text",
+    "placeholders": {}
+  }
+}
