@@ -22,6 +22,7 @@ class AppConf {
   final int cacheTimeoutMinutes = 3;
   final ToddMode toddMode = ToddMode.admin;
   final bool debug = true;
+  final String loadingImageUrl = 'https://pushboi.io/img/loading.webp';
   late String platform;
   final int requestTimeout = 10;
 

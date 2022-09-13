@@ -53,7 +53,9 @@ class Lip extends http.BaseClient {
         await Future.delayed(const Duration(milliseconds: 2000));
         pool?.checkAddresses();
         tryUri = pool?.makeUri(path, usePathRoot: usePathRoot);
-        if (attempt == 5) {
+        attempt++;
+
+        if (attempt == 2) {
           king.snacker.addSnack(Snacks.networkError);
           wasPrepError = true;
           break;

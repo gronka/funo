@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:fui_web/widgets/chat/chat_page.dart';
 import 'package:fui_web/widgets/home_page.dart';
 import 'package:fui_lib/fui_lib.dart';
 
@@ -15,10 +16,19 @@ GoRouter makeGoRouter() {
           return HomePage();
         },
       ),
+      //
+
       GoRoute(
         path: Routes.home,
         builder: (BuildContext context, GoRouterState state) {
           return HomePage();
+        },
+      ),
+
+      GoRoute(
+        path: Routes.chat,
+        builder: (BuildContext context, GoRouterState state) {
+          return ChatPage();
         },
       ),
     ],

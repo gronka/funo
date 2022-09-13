@@ -12,4 +12,8 @@ class EndpointsV1 {
   static const String toddSignInWithGoogle = 'v1/todd/signIn.withGoogle';
   static const String toddSignOut = 'v1/todd/signOut';
   static const String toddJwtRefresh = 'v1/todd/jwt.refresh';
+
+  static const String chatGetById = 'v1/chat/get.byId';
+  static const String chatPollForNew = 'v1/chat/pollForNew';
+  static const String chatSendMsg = 'v1/chat/sendMsg';
 }

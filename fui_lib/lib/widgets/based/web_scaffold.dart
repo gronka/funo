@@ -5,8 +5,24 @@ import 'package:go_router/go_router.dart';
 import 'package:fui_lib/fui_lib.dart';
 
 class WebScaffold extends StatelessWidget {
-  const WebScaffold({required this.body});
+  const WebScaffold({
+    required this.body,
+    this.padLeft = 0,
+    this.padTop = 20,
+    this.padBottom = 20,
+    this.padRight = 0,
+    this.minWidth = 140,
+    this.maxWidth = 900,
+    this.stretch = false,
+  });
   final Widget body;
+  final double padLeft;
+  final double padTop;
+  final double padBottom;
+  final double padRight;
+  final double minWidth;
+  final double maxWidth;
+  final bool stretch;
 
   @override
   Widget build(BuildContext context) {
@@ -56,26 +72,37 @@ class WebScaffold extends StatelessWidget {
         body: Stack(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+              padding:
+                  EdgeInsets.fromLTRB(padLeft, padTop, padRight, padBottom),
               //child: Center(child: body),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Flexible(child: SizedBox.shrink()),
-                  //SizedBox.shrink(),
-                  Flexible(
-                    flex: 6,
-                    child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          minWidth: 140,
-                          maxWidth: 900,
+                children: stretch
+                    ? <Widget>[
+                        ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: minWidth,
+                              maxWidth: maxWidth,
+                              maxHeight: 4000,
+                            ),
+                            child: body),
+                      ]
+                    : <Widget>[
+                        const Flexible(child: SizedBox.shrink()),
+                        Flexible(
+                          flex: 6,
+                          child: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                minWidth: minWidth,
+                                maxWidth: maxWidth,
+                                maxHeight: 4000,
+                              ),
+                              child: body),
                         ),
-                        child: body),
-                  ),
-                  //SizedBox.shrink(),
-                  const Flexible(child: SizedBox.shrink()),
-                ],
+                        //SizedBox.shrink(),
+                        const Flexible(child: SizedBox.shrink()),
+                      ],
               ),
             ),
             BasedSnackBar(),
