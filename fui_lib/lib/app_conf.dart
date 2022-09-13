@@ -26,6 +26,8 @@ class AppConf {
   late String platform;
   final int requestTimeout = 10;
 
+  final bool mockAutoSignIn = true;
+
   AppConf() {
     //print('Configuration initializaing...');
 
@@ -52,13 +54,13 @@ class AppConf {
         switch (platform) {
           case 'web':
           case 'ios':
-            apiPool.addAddress('http://localhost:8000', 'api');
-            apiPool.addAddress('http://localhost:80', 'api');
+            apiPool.addAddress('https://uf-public:8050', 'api');
+            //apiPool.addAddress('https://localhost:80', 'api');
             break;
 
           case 'android':
             //apiPool.addAddress('http://10.0.2.2:8000', 'api');
-            apiPool.addAddress('http://10.0.2.2:80', 'api');
+            apiPool.addAddress('https://10.0.2.2:80', 'api');
             break;
 
           case 'linux':
@@ -66,7 +68,7 @@ class AppConf {
           case 'macos':
           case 'fuchsia':
           default:
-            apiPool.addAddress('http://localhost:800', 'api');
+            apiPool.addAddress('https://localhost:800', 'api');
         }
         break;
 

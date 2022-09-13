@@ -14,6 +14,8 @@ class EndpointsV1 {
   static const String toddJwtRefresh = 'v1/todd/jwt.refresh';
 
   static const String chatGetById = 'v1/chat/get.byId';
+  static const String chatGetByPhone = 'v1/chat/get.byPhone';
+  static const String chatMsgsGetByPhone = 'v1/chatMsgs/get.byPhone';
   static const String chatPollForNew = 'v1/chat/pollForNew';
   static const String chatSendMsg = 'v1/chat/sendMsg';
 }

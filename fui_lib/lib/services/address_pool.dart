@@ -96,7 +96,7 @@ class Address {
     required this.checkIndex,
     required this.timeout,
   }) {
-    healthCheckUri = Uri.parse('$origin/$pathRoot/');
+    healthCheckUri = Uri.parse('$origin/$pathRoot');
   }
 
   late final Uri healthCheckUri;
@@ -122,7 +122,6 @@ class Address {
     try {
       var startTime = DateTime.now().millisecondsSinceEpoch;
       print('POOL: checking address $healthCheckUri');
-      print('POOL: checking address $origin');
       var response =
           await http.get(healthCheckUri).timeout(Duration(seconds: timeout));
       var endTime = DateTime.now().millisecondsSinceEpoch;
@@ -142,6 +141,7 @@ class Address {
       print('POOL: Failed to get health due to unknown: $healthCheckUri');
       isOk = false;
     }
+    print('POOL: is $origin okay? $isHealthy');
     isHealthy = isOk;
     isCheckRunning = false;
   }

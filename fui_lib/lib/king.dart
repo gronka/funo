@@ -38,15 +38,19 @@ class King {
     this.todd = Todd(this);
     todd.toddMode = conf.toddMode;
 
-    //if (this.conf.mockAutoSignIn) {
-    //this.todd.signInWithEmail(email: '2@2.2', password: 'asdf');
-    //}
+    if (this.conf.mockAutoSignIn) {
+      if (!todd.isSignedIn) {
+        Future.delayed(const Duration(milliseconds: 2000), () {
+          this.todd.signInWithEmail(email: '9@9.9', password: 'asdf');
+        });
+      }
+    }
   }
 
   initAsyncObjects() async {
     box = await Hive.openBox('box');
 
-    todd.loadLogin();
+    //todd.loadLogin();
 
     deep.initAppLinks();
   }

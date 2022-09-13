@@ -114,6 +114,12 @@ class WriteMessageState extends State<WriteMessage> {
               ),
               TextButton(
                 onPressed: () {
+                  refresh();
+                },
+                child: const Text('reload chat'),
+              ),
+              TextButton(
+                onPressed: () {
                   send();
                 },
                 child: const Text('send'),
@@ -154,6 +160,28 @@ class WriteMessageState extends State<WriteMessage> {
     if (ares.isNotOk) {
       this.setState(() {
         _failureMsg = 'Failed to send.';
+      });
+    }
+  }
+
+  Future<void> refresh() async {
+    var opts = King.of(context).pad.chatOptions;
+    Map<String, dynamic> payload = {
+      'Phone': opts.phone,
+    };
+
+    var ares = await King.of(context).lip.api(
+          EndpointsV1.chatGetByPhone,
+          payload: payload,
+        );
+
+    if (ares.isNotOk) {
+      this.setState(() {
+        _failureMsg = 'Failed to get chat.';
+      });
+    } else {
+      this.setState(() {
+        _failureMsg = '';
       });
     }
   }

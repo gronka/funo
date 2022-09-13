@@ -63,13 +63,13 @@ abstract class ToddBase with Store {
     ApiResponse ares = await king.lip.api(
       toddMode.refreshEndpoint,
       payload: {
-        'session_jwt': sessionJwt,
+        'SessionJwt': sessionJwt,
       },
     );
 
     if (ares.isOk) {
-      if (ares.body.containsKey('new_jwt')) {
-        jwt = ares.body['new_jwt'];
+      if (ares.body.containsKey('NewJwt')) {
+        jwt = ares.body['NewJwt'];
         if (jwt.isEmpty) {
           signOut();
         }
@@ -83,17 +83,17 @@ abstract class ToddBase with Store {
 
   @action
   void processSignInResponse(ApiResponse ares) {
-    if (ares.body.containsKey('new_jwt')) {
-      jwt = ares.body['new_jwt'];
+    if (ares.body.containsKey('NewJwt')) {
+      jwt = ares.body['NewJwt'];
     }
 
-    if (ares.body.containsKey('session_jwt')) {
-      sessionJwt = ares.body['session_jwt'];
+    if (ares.body.containsKey('SessionJwt')) {
+      sessionJwt = ares.body['SessionJwt'];
     }
 
-    developerId = ares.body['developer_id'] ?? '';
+    developerId = ares.body['DeveloperId'] ?? '';
     stripeCustomerId = ares.body['stripe_customer_id'] ?? '';
-    surferId = ares.body['surfer_id'] ?? '';
+    surferId = ares.body['SurferId'] ?? '';
 
     isAppleAccount = ares.body['is_apple_account'] ?? false;
     isGoogleAccount = ares.body['is_google_account'] ?? false;
@@ -213,7 +213,7 @@ abstract class ToddBase with Store {
 
   void attachSessionHeaders(Map<String, String> headers) {
     if (jwt != '') {
-      headers['JWT'] = jwt;
+      headers['UfAuth'] = jwt;
     }
   }
 
@@ -228,7 +228,7 @@ abstract class ToddBase with Store {
       ApiResponse ares = await king.lip.api(
         toddMode.signOutEndpoint,
         payload: {
-          'session_jwt': sessionJwt,
+          'SessionJwt': sessionJwt,
         },
       );
 

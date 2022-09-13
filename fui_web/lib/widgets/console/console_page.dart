@@ -25,6 +25,12 @@ class ConsolePage extends StatelessWidget {
               },
               child: const Text('Sign in or create an account'),
             ),
+            TextButton(
+              onPressed: () {
+                context.go(Routes.chat);
+              },
+              child: const Text('Chat with Fridayy'),
+            ),
           ],
         ),
       ),
