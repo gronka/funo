@@ -165,10 +165,10 @@ class Cache<T> {
 
 void initWrapper(dynamic item, String id, King king) async {
   switch (item.runtimeType) {
-    //case ChannelSub:
-    //item.king = king;
-    //item.loadLocal();
-    //break;
+    case Chat:
+      item.king = king;
+      //item.loadLocal();
+      break;
 
     //case NetworkSub:
     //item.king = king;

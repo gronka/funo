@@ -7,11 +7,32 @@ part 'chat.g.dart';
 class Chats {
   Chats(this.king);
   final ObservableMap<String, Chat> byId = ObservableMap();
+  bool isInitialLoad = true;
   King king;
+
+  Future<void> loadAllChatsFromApiInitial() async {
+    if (isInitialLoad) {
+      loadAllChatsFromApi();
+    }
+    isInitialLoad = false;
+  }
+
+  Future<void> loadAllChatsFromApi() async {
+    ApiResponse ares = await king.lip.api(EndpointsV1.chatsGetList);
+    if (ares.body.containsKey('Collection')) {
+      for (final item in ares.body['Collection']!) {
+        var chat = makeChat();
+        chat.unpackFromApi(item);
+        if (!byId.containsKey(chat.chatId)) {
+          byId[chat.chatId] = chat;
+        }
+      }
+    }
+  }
 
   Chat getChatById(String chatId) {
     if (!byId.containsKey(chatId)) {
-      byId[chatId] = Chat();
+      byId[chatId] = makeChat();
     }
 
     if (byId[chatId]!.isInitialLoad) {
@@ -49,6 +70,12 @@ class Chats {
 
     chat.unpackMsgs(ares.body);
   }
+
+  Chat makeChat() {
+    final chat = Chat();
+    chat.king = king;
+    return chat;
+  }
 }
 
 class Chat = ChatBase with _$Chat;
@@ -56,6 +83,7 @@ class Chat = ChatBase with _$Chat;
 abstract class ChatBase with Store {
   final ObservableList<Msg> msgs = ObservableList();
 
+  King? king;
   bool isInitialLoad = true;
   @observable
   String surferId = '';
@@ -65,15 +93,26 @@ abstract class ChatBase with Store {
   String teaser = '';
   @observable
   String teaserSurferId = '';
-  @observable
-  int lastMsgTime = 0;
+
+  @computed
+  int get lastMsgTime {
+    if (msgs.isNotEmpty) {
+      return msgs[0].timeCreated;
+    }
+    return 0;
+  }
+
+  //@computed
+  //String get phone {
+  //final surfer = king!.lad.surferProxy.getById(surferId);
+  //return surfer.phone;
+  //}
 
   void unpackFromApi(Map<String, dynamic> jin) {
-    chatId = readString(jin, 'chatId');
-    surferId = readString(jin, 'surferId');
-    teaser = readString(jin, 'teaser');
-    teaserSurferId = readString(jin, 'teaserSurferId');
-    lastMsgTime = readInt(jin, 'LastMsgTime');
+    chatId = readString(jin, 'ChatId');
+    surferId = readString(jin, 'SurferId');
+    teaser = readString(jin, 'Teaser');
+    teaserSurferId = readString(jin, 'TeaserSurferId');
 
     unpackMsgs(jin);
 
@@ -82,17 +121,51 @@ abstract class ChatBase with Store {
 
   void unpackMsgs(Map<String, dynamic> jin) {
     if (jin.containsKey('Msgs')) {
+      //TODO append to msgs instead of refreshing all
+      msgs.clear();
       for (final item in jin['Msgs']!) {
         var msg = Msg.fromJson(item);
         msgs.add(msg);
       }
     }
   }
+
+  void unpackCollection(Map<String, dynamic> jin) {
+    if (jin.containsKey('Collection')) {
+      //TODO append to msgs instead of refreshing all
+      msgs.clear();
+      for (final item in jin['Collection']!) {
+        var msg = Msg.fromJson(item);
+        msgs.add(msg);
+      }
+    }
+  }
+
+  Future<void> getNewMsgsByChatIdFromApi() async {
+    if (chatId == '') {
+      return;
+    }
+
+    var afterTime = 0;
+    if (msgs.isNotEmpty) {
+      afterTime = msgs[0].timeCreated;
+    }
+
+    ApiResponse ares = await king!.lip.api(
+      EndpointsV1.chatMsgsGetById,
+      payload: {
+        'ChatId': chatId,
+        'AfterTime': afterTime,
+      },
+    );
+
+    unpackCollection(ares.body);
+  }
 }
 
 class Msg {
   Msg({
-    this.body = '',
+    this.content = '',
     this.chatId = '',
     this.msgId = '',
     this.surferId = '',
@@ -100,7 +173,7 @@ class Msg {
     this.timeUpdated = 0,
   });
 
-  final String body;
+  final String content;
   final String chatId;
   final String msgId;
   final String surferId;
@@ -114,12 +187,12 @@ class Msg {
   String username = 'placeholder';
 
   factory Msg.fromJson(Map<String, dynamic> jin) => Msg(
-        body: readString(jin, 'body'),
-        chatId: readString(jin, 'chatId'),
-        msgId: readString(jin, 'chatId'),
-        surferId: readString(jin, 'surferId'),
-        timeCreated: readInt(jin, 'timeCreated'),
-        timeUpdated: readInt(jin, 'timeUpdated'),
+        content: readString(jin, 'Content'),
+        chatId: readString(jin, 'ChatId'),
+        msgId: readString(jin, 'MsgId'),
+        surferId: readString(jin, 'SurferId'),
+        timeCreated: readInt(jin, 'TimeCreated'),
+        timeUpdated: readInt(jin, 'TimeUpdated'),
       );
 
   String get timeReadable {

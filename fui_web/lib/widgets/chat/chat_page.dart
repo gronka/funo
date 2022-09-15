@@ -8,15 +8,24 @@ import 'package:fui_web/widgets/chat/chat_options.dart';
 class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    King.of(context).lad.chats.loadAllChatsFromApiInitial();
+
     return WebScaffold(
       body: Center(
         child: Column(
           children: <Widget>[
             const Text('Allow us to select between session vs IP user'),
+            TextButton(
+              onPressed: () async {
+                King.of(context).lad.chats.loadAllChatsFromApi();
+              },
+              child: const Text('update chat list'),
+            ),
             ChatOptionsWidget(),
             const SizedBox(height: 24),
             ChatArea(),
             WriteMessage(),
+            ChatSelect(),
           ],
         ),
       ),
@@ -24,13 +33,11 @@ class ChatPage extends StatelessWidget {
   }
 }
 
-class ChatArea extends StatelessWidget {
+class ChatSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var junk = ObservableList();
-    junk.add('hi');
-    junk.add('there');
-    junk.add('my');
+    final lad = King.of(context).lad;
+    final opts = King.of(context).pad.chatOptions;
 
     return Container(
       decoration: const BoxDecoration(
@@ -45,12 +52,78 @@ class ChatArea extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: Observer(
           builder: (_) {
+            final chatValues = lad.chats.byId.values;
+            final chats = ObservableList.of(chatValues);
+
             return ListView.separated(
               shrinkWrap: true,
-              itemCount: junk.length,
+              itemCount: chats.length,
               separatorBuilder: (context, index) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                return Text(junk[index]);
+                final chat = chats[index];
+                final surfer = lad.surferProxy.getById(chat.surferId);
+
+                return Observer(
+                  builder: (_) => TextButton(
+                    onPressed: () {
+                      opts.selectedChatId = chat.chatId;
+                      final testChat = King.of(context)
+                          .lad
+                          .chats
+                          .getChatById(opts.selectedChatId);
+
+                      testChat.getNewMsgsByChatIdFromApi();
+                    },
+                    child: Text('chat phone: ${surfer.phone}'),
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class ChatArea extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final junk = ObservableList();
+    junk.add('hi');
+    junk.add('there');
+    junk.add('my');
+
+    final opts = King.of(context).pad.chatOptions;
+
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          top: BorderSide(color: Color(0xAAAAAAAA)),
+          left: BorderSide(color: Color(0xAAAAAAAA)),
+          right: BorderSide(color: Color(0xAAAAAAAA)),
+          //bottom: BorderSide(color: Color(0xAAAAAAAA)),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Observer(
+          builder: (_) {
+            final msgs = King.of(context)
+                .lad
+                .chats
+                .getChatById(opts.selectedChatId)
+                .msgs;
+
+            return ListView.separated(
+              shrinkWrap: true,
+              itemCount: msgs.length,
+              //itemCount: junk.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 12),
+              itemBuilder: (context, index) {
+                final msg = msgs[index];
+                return Text(msg.content);
+                //return Text(junk[index]);
               },
             );
           },
@@ -142,17 +215,20 @@ class WriteMessageState extends State<WriteMessage> {
 
     this.setState(() {
       _failureMsg = '';
-      content = '';
     });
 
-    var opts = King.of(context).pad.chatOptions;
+    final lad = King.of(context).lad;
+    final opts = King.of(context).pad.chatOptions;
+    final chat = lad.chats.getChatById(opts.selectedChatId);
+
     Map<String, dynamic> payload = {
-      'Phone': opts.phone,
       'Content': content,
+      'ChatId': chat.chatId,
+      'SurferId': chat.surferId,
     };
 
-    var king = King.of(context);
-    var ares = await king.lip.api(
+    final king = King.of(context);
+    final ares = await king.lip.api(
       EndpointsV1.chatSendMsg,
       payload: payload,
     );
@@ -161,28 +237,38 @@ class WriteMessageState extends State<WriteMessage> {
       this.setState(() {
         _failureMsg = 'Failed to send.';
       });
+    } else {
+      this.setState(() {
+        content = '';
+      });
     }
   }
 
   Future<void> refresh() async {
-    var opts = King.of(context).pad.chatOptions;
-    Map<String, dynamic> payload = {
-      'Phone': opts.phone,
-    };
+    final lad = King.of(context).lad;
+    final opts = King.of(context).pad.chatOptions;
+    final chat = lad.chats.getChatById(opts.selectedChatId);
+    opts.selectedChatId = chat.chatId;
 
-    var ares = await King.of(context).lip.api(
-          EndpointsV1.chatGetByPhone,
-          payload: payload,
-        );
+    chat.getNewMsgsByChatIdFromApi();
+    //final opts = King.of(context).pad.chatOptions;
+    //Map<String, dynamic> payload = {
+    //'Phone': opts.phone,
+    //};
 
-    if (ares.isNotOk) {
-      this.setState(() {
-        _failureMsg = 'Failed to get chat.';
-      });
-    } else {
-      this.setState(() {
-        _failureMsg = '';
-      });
-    }
+    //final ares = await King.of(context).lip.api(
+    //EndpointsV1.chatGetByPhone,
+    //payload: payload,
+    //);
+
+    //if (ares.isNotOk) {
+    //this.setState(() {
+    //_failureMsg = 'Failed to get chat.';
+    //});
+    //} else {
+    //this.setState(() {
+    //_failureMsg = '';
+    //});
+    //}
   }
 }

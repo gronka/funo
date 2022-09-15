@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:universal_io/io.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:fui_lib/fui_lib.dart';
 
@@ -67,8 +68,10 @@ class Lip extends http.BaseClient {
       uri = Uri.parse('$origin/$path');
     }
 
+    var uuid = const Uuid();
     Map<String, String> headers = {
       'content-type': 'application/json',
+      'UfId': uuid.v1(),
     };
     king.todd.attachSessionHeaders(headers);
 

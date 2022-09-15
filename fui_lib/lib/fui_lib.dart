@@ -2,6 +2,7 @@ export 'package:fui_lib/app_conf.dart';
 export 'package:fui_lib/king.dart';
 export 'package:fui_lib/pad.dart';
 
+export 'package:fui_lib/consts/consts.dart';
 export 'package:fui_lib/consts/endpoints.dart';
 export 'package:fui_lib/consts/exceptions.dart';
 export 'package:fui_lib/consts/snacks.dart';

@@ -9,17 +9,18 @@ class ChatOptionsWidget extends StatefulWidget {
 
 class ChatOptionsState extends State<ChatOptionsWidget> {
   final _textController = TextEditingController();
-  late ChatOptions opts;
 
   @override
   initState() {
     super.initState();
-    opts = King.of(context).pad.chatOptions;
+    final opts = King.of(context).pad.chatOptions;
     _textController.text = opts.phone;
   }
 
   @override
   Widget build(BuildContext context) {
+    final opts = King.of(context).pad.chatOptions;
+
     return Row(
       children: <Widget>[
         const Text('Conversation for phone #:'),

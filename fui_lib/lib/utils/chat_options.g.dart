@@ -25,10 +25,27 @@ mixin _$ChatOptions on ChatOptionsBase, Store {
     });
   }
 
+  late final _$selectedChatIdAtom =
+      Atom(name: 'ChatOptionsBase.selectedChatId', context: context);
+
+  @override
+  String get selectedChatId {
+    _$selectedChatIdAtom.reportRead();
+    return super.selectedChatId;
+  }
+
+  @override
+  set selectedChatId(String value) {
+    _$selectedChatIdAtom.reportWrite(value, super.selectedChatId, () {
+      super.selectedChatId = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
-phone: ${phone}
+phone: ${phone},
+selectedChatId: ${selectedChatId}
     ''';
   }
 }

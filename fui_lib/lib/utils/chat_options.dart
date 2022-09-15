@@ -7,4 +7,7 @@ class ChatOptions = ChatOptionsBase with _$ChatOptions;
 abstract class ChatOptionsBase with Store {
   @observable
   String phone = '';
+
+  @observable
+  String selectedChatId = '';
 }
