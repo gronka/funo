@@ -213,10 +213,6 @@ class WriteMessageState extends State<WriteMessage> {
       return;
     }
 
-    this.setState(() {
-      _failureMsg = '';
-    });
-
     final lad = King.of(context).lad;
     final opts = King.of(context).pad.chatOptions;
     final chat = lad.chats.getChatById(opts.selectedChatId);
@@ -224,7 +220,7 @@ class WriteMessageState extends State<WriteMessage> {
     Map<String, dynamic> payload = {
       'Content': content,
       'ChatId': chat.chatId,
-      'SurferId': chat.surferId,
+      'SenderSurferId': chat.surferId,
     };
 
     final king = King.of(context);
@@ -240,6 +236,7 @@ class WriteMessageState extends State<WriteMessage> {
     } else {
       this.setState(() {
         content = '';
+        _failureMsg = '';
       });
     }
   }

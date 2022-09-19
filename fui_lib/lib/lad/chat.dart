@@ -168,7 +168,7 @@ class Msg {
     this.content = '',
     this.chatId = '',
     this.msgId = '',
-    this.surferId = '',
+    this.senderSurferId = '',
     this.timeCreated = 0,
     this.timeUpdated = 0,
   });
@@ -176,7 +176,7 @@ class Msg {
   final String content;
   final String chatId;
   final String msgId;
-  final String surferId;
+  final String senderSurferId;
   final int timeCreated;
   final int timeUpdated;
 
@@ -190,7 +190,7 @@ class Msg {
         content: readString(jin, 'Content'),
         chatId: readString(jin, 'ChatId'),
         msgId: readString(jin, 'MsgId'),
-        surferId: readString(jin, 'SurferId'),
+        senderSurferId: readString(jin, 'SenderSurferId'),
         timeCreated: readInt(jin, 'TimeCreated'),
         timeUpdated: readInt(jin, 'TimeUpdated'),
       );

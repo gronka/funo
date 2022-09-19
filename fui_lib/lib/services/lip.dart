@@ -165,6 +165,7 @@ class Lip extends http.BaseClient {
                   .timeout(Duration(seconds: timeout));
               break;
           }
+
           ares.processHttpResponse(response, king);
         } on SocketException catch (e, s) {
           print(e);
@@ -226,10 +227,10 @@ class ApiResponse {
         print(s);
       }
 
-      if (body.containsKey('errors')) {
-        for (Map<String, dynamic> errj in body['errors']) {
+      if (body.containsKey('Errors')) {
+        for (Map<String, dynamic> errj in body['Errors']) {
           final error =
-              ApiError(readInt(errj, 'code'), readString(errj, 'msg'));
+              ApiError(readString(errj, 'Code'), readString(errj, 'Msg'));
           errors.add(error);
         }
         errored = true;
@@ -267,7 +268,7 @@ class ApiResponse {
     }
   }
 
-  bool hasErrorCode(int code) {
+  bool hasErrorCode(String code) {
     for (final error in errors) {
       if (code == error.code) {
         return true;
@@ -276,7 +277,7 @@ class ApiResponse {
     return false;
   }
 
-  bool hasOneOfErrorCodes(List<int> codes) {
+  bool hasOneOfErrorCodes(List<String> codes) {
     for (final error in errors) {
       if (codes.contains(error.code)) {
         return true;
@@ -285,7 +286,7 @@ class ApiResponse {
     return false;
   }
 
-  String errorMsgFromCode(int code) {
+  String errorMsgFromCode(String code) {
     for (final error in errors) {
       if (error.code == code) {
         return error.msg;
@@ -313,6 +314,6 @@ class ApiResponse {
 
 class ApiError {
   const ApiError(this.code, this.msg);
-  final int code;
+  final String code;
   final String msg;
 }
