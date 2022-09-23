@@ -32,7 +32,9 @@ export 'package:fui_lib/utils/chat_options.dart';
 
 export 'package:fui_lib/widgets/based/cards.dart';
 export 'package:fui_lib/widgets/based/failure_msgs.dart';
+export 'package:fui_lib/widgets/based/forms.dart';
 export 'package:fui_lib/widgets/based/images.dart';
+export 'package:fui_lib/widgets/based/shared.dart';
 export 'package:fui_lib/widgets/based/snack_bar.dart';
 export 'package:fui_lib/widgets/based/text.dart';
 export 'package:fui_lib/widgets/based/web_scaffold.dart';

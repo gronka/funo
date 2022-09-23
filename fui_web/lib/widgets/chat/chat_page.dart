@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -64,18 +65,20 @@ class ChatSelect extends StatelessWidget {
                 final surfer = lad.surferProxy.getById(chat.surferId);
 
                 return Observer(
-                  builder: (_) => TextButton(
-                    onPressed: () {
-                      opts.selectedChatId = chat.chatId;
-                      final testChat = King.of(context)
-                          .lad
-                          .chats
-                          .getChatById(opts.selectedChatId);
+                  builder: (_) => surfer.phone == ''
+                      ? const SizedBox.shrink()
+                      : TextButton(
+                          onPressed: () {
+                            opts.selectedChatId = chat.chatId;
+                            final testChat = King.of(context)
+                                .lad
+                                .chats
+                                .getChatById(opts.selectedChatId);
 
-                      testChat.getNewMsgsByChatIdFromApi();
-                    },
-                    child: Text('chat phone: ${surfer.phone}'),
-                  ),
+                            testChat.getNewMsgsByChatIdFromApi();
+                          },
+                          child: Text('chat phone: ${surfer.phone}'),
+                        ),
                 );
               },
             );
@@ -142,9 +145,18 @@ class WriteMessageState extends State<WriteMessage> {
   final _textController = TextEditingController();
   String _failureMsg = '';
 
+  Timer? timer;
+
   @override
   initState() {
     super.initState();
+    timer = Timer.periodic(const Duration(seconds: 2), (Timer t) => refresh());
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   String get content {

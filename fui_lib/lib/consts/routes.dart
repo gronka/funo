@@ -10,4 +10,8 @@ class Routes {
   static const String signIn = '/signIn';
 
   static const String developer = '/developer';
+
+  static const String loggedOutChangePasswordRequest =
+      '/loggedOutChangePasswordRequest';
+  static const String confirmEmail = '/confirmEmail';
 }

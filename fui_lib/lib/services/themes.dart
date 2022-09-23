@@ -59,7 +59,7 @@ abstract class ThemeSelectBase with Store {
 // brightness
 //primarySwatch: Colors.grey,
 ThemeData lightTheme = ThemeData(
-  primarySwatch: Colors.green,
+  primarySwatch: Colors.purple,
 );
 
 ThemeData darkTheme = ThemeData(
@@ -71,7 +71,7 @@ ThemeData darkTheme = ThemeData(
     primary: Colors.black,
     onPrimary: Colors.black,
     primaryContainer: Colors.black,
-    secondary: Colors.green,
+    secondary: Colors.purple,
   ),
   cardTheme: CardTheme(
     color: Colors.grey[850],

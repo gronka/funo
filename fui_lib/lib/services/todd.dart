@@ -224,18 +224,18 @@ abstract class ToddBase with Store {
 
   @action
   Future<void> signOut() async {
-    if (sessionJwt.isNotEmpty) {
-      ApiResponse ares = await king.lip.api(
-        toddMode.signOutEndpoint,
-        payload: {
-          'SessionJwt': sessionJwt,
-        },
-      );
+    //if (sessionJwt.isNotEmpty) {
+    //ApiResponse ares = await king.lip.api(
+    //toddMode.signOutEndpoint,
+    //payload: {
+    //'SessionJwt': sessionJwt,
+    //},
+    //);
 
-      if (ares.isNotOk) {
-        king.snacker.addSnack(Snacks.signOutError);
-      }
-    }
+    //if (ares.isNotOk) {
+    //king.snacker.addSnack(Snacks.signOutError);
+    //}
+    //}
 
     signOutLocally();
   }
