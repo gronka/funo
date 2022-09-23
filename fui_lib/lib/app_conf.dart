@@ -12,8 +12,8 @@ enum DevicePlatform { none, and }
 class AppConf {
   final AddressPool apiPool = AddressPool();
 
+  final String env = const String.fromEnvironment('ENV', defaultValue: 'dev');
   final String appName = 'fui_web';
-  final String env = 'dev';
   final String firebaseToken = '';
   final String logLevel = 'all';
   final String stripePublishableKey = '';
@@ -76,7 +76,8 @@ class AppConf {
         throw Exception('lab environment not configured');
 
       case 'prod':
-        apiPool.addAddress('https://fridayy.io', 'api');
+        //apiPool.addAddress('https://api.cheese.rodeo:8050', 'api');
+        apiPool.addAddress('https://api.cheese.rodeo', 'api');
         break;
 
       default:

@@ -45,8 +45,11 @@ class Lip extends http.BaseClient {
   }) async {
     bool wasPrepError = false;
     Uri uri = Uri();
+
+    king.log.d('about to try Uri');
     if (pool != null) {
       Uri? tryUri = pool?.makeUri(path, usePathRoot: usePathRoot);
+      king.log.d('$tryUri');
 
       int attempt = 1;
       while (tryUri == null) {
@@ -75,6 +78,7 @@ class Lip extends http.BaseClient {
     };
     king.todd.attachSessionHeaders(headers);
 
+    king.log.d('request to tryUri $path');
     var ares = await makeRequest(
       headers: headers,
       method: method,

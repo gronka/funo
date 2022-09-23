@@ -229,14 +229,16 @@ class WriteMessageState extends State<WriteMessage> {
       payload: payload,
     );
 
-    if (ares.isNotOk) {
-      this.setState(() {
-        _failureMsg = 'Failed to send.';
-      });
-    } else {
+    if (ares.isOk) {
       this.setState(() {
         content = '';
         _failureMsg = '';
+      });
+
+      Future.delayed(const Duration(milliseconds: 100), () => refresh());
+    } else {
+      this.setState(() {
+        _failureMsg = 'Failed to send.';
       });
     }
   }

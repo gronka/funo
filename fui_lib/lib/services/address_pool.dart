@@ -126,6 +126,7 @@ class Address {
           await http.get(healthCheckUri).timeout(Duration(seconds: timeout));
       var endTime = DateTime.now().millisecondsSinceEpoch;
       ping = endTime - startTime;
+      print('POOL: ${response.statusCode}');
       if (response.statusCode == 200) {
         isOk = true;
       }
@@ -141,8 +142,8 @@ class Address {
       print('POOL: Failed to get health due to unknown: $healthCheckUri');
       isOk = false;
     }
-    print('POOL: is $origin okay? $isHealthy');
     isHealthy = isOk;
+    print('POOL: is $origin okay? $isHealthy');
     isCheckRunning = false;
   }
 }

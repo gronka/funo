@@ -92,11 +92,11 @@ abstract class ToddBase with Store {
     }
 
     developerId = ares.body['DeveloperId'] ?? '';
-    stripeCustomerId = ares.body['stripe_customer_id'] ?? '';
+    stripeCustomerId = ares.body['StripeCustomerId'] ?? '';
     surferId = ares.body['SurferId'] ?? '';
 
-    isAppleAccount = ares.body['is_apple_account'] ?? false;
-    isGoogleAccount = ares.body['is_google_account'] ?? false;
+    isAppleAccount = ares.body['IsAppleAccount'] ?? false;
+    isGoogleAccount = ares.body['IsGoogleAccount'] ?? false;
     print('developer_id from server is +$developerId+');
     print('surfer_id from server is +$surferId+');
 
@@ -263,10 +263,10 @@ abstract class ToddBase with Store {
     ApiResponse ares = await king.lip.api(
       toddMode.registerWithEmailEndpoint,
       payload: {
-        'email': email,
-        'password': password,
-        'instance_id': king.conf.firebaseToken,
-        'platform': king.conf.platform,
+        'Email': email,
+        'Password': password,
+        'InstanceId': king.conf.firebaseToken,
+        'Platform': king.conf.platform,
       },
     );
 
@@ -287,10 +287,10 @@ abstract class ToddBase with Store {
     ApiResponse ares = await king.lip.api(
       toddMode.signInWithEmailEndpoint,
       payload: {
-        'email': email,
-        'password': password,
-        'instance_id': king.conf.firebaseToken,
-        'platform': king.conf.platform,
+        'Email': email,
+        'Password': password,
+        'InstanceId': king.conf.firebaseToken,
+        'Platform': king.conf.platform,
       },
     );
 
@@ -323,9 +323,9 @@ abstract class ToddBase with Store {
     ApiResponse ares = await king.lip.api(
       toddMode.signInWithGoogleEndpoint,
       payload: {
-        'instance_id': king.conf.firebaseToken,
-        'platform': king.conf.platform,
-        'token': token,
+        'InstanceId': king.conf.firebaseToken,
+        'Platform': king.conf.platform,
+        'Token': token,
       },
     );
 
@@ -358,12 +358,12 @@ abstract class ToddBase with Store {
       ApiResponse ares = await king.lip.api(
         toddMode.signInWithAppleEndpoint,
         payload: {
-          'auth_code': credential.authorizationCode,
-          //'client_id': king.conf.signInWithAppleClientId,
-          //'email': credential.email ?? '',
-          'id_token': credential.identityToken,
-          'instance_id': king.conf.firebaseToken,
-          'platform': king.conf.platform,
+          'AuthCode': credential.authorizationCode,
+          //'ClientId': king.conf.signInWithAppleClientId,
+          //'Email': credential.email ?? '',
+          'IdToken': credential.identityToken,
+          'InstanceId': king.conf.firebaseToken,
+          'Platform': king.conf.platform,
         },
       );
 
