@@ -144,19 +144,33 @@ class WriteMessage extends StatefulWidget {
 class WriteMessageState extends State<WriteMessage> {
   final _textController = TextEditingController();
   String _failureMsg = '';
+  bool _autoRefresh = false;
 
   Timer? timer;
 
   @override
   initState() {
     super.initState();
-    timer = Timer.periodic(const Duration(seconds: 2), (Timer t) => refresh());
   }
 
   @override
   void dispose() {
     timer?.cancel();
     super.dispose();
+  }
+
+  toggleTimer() {
+    setState(() {
+      _autoRefresh = !_autoRefresh;
+
+      if (_autoRefresh) {
+        timer = Timer.periodic(const Duration(seconds: 2), (Timer t) {
+          refresh();
+        });
+      } else {
+        timer?.cancel();
+      }
+    });
   }
 
   String get content {
@@ -212,6 +226,19 @@ class WriteMessageState extends State<WriteMessage> {
             ],
           ),
           FailureMsg(_failureMsg),
+          const SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: <Widget>[
+                Checkbox(
+                  value: _autoRefresh,
+                  onChanged: (bool? newValue) => toggleTimer(),
+                ),
+                const Expanded(child: Text('Auto update?')),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -219,7 +246,7 @@ class WriteMessageState extends State<WriteMessage> {
 
   Future<void> send() async {
     if (content == '') {
-      this.setState(() {
+      setState(() {
         _failureMsg = 'You must write something';
       });
       return;
@@ -242,14 +269,14 @@ class WriteMessageState extends State<WriteMessage> {
     );
 
     if (ares.isOk) {
-      this.setState(() {
+      setState(() {
         content = '';
         _failureMsg = '';
       });
 
       Future.delayed(const Duration(milliseconds: 100), () => refresh());
     } else {
-      this.setState(() {
+      setState(() {
         _failureMsg = 'Failed to send.';
       });
     }
@@ -273,11 +300,11 @@ class WriteMessageState extends State<WriteMessage> {
     //);
 
     //if (ares.isNotOk) {
-    //this.setState(() {
+    //setState(() {
     //_failureMsg = 'Failed to get chat.';
     //});
     //} else {
-    //this.setState(() {
+    //setState(() {
     //_failureMsg = '';
     //});
     //}
