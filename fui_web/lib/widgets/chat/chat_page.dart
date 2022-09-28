@@ -7,6 +7,8 @@ import 'package:fui_lib/fui_lib.dart';
 import 'package:fui_web/widgets/chat/chat_options.dart';
 
 class ChatPage extends StatelessWidget {
+  final scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     King.of(context).lad.chats.loadAllChatsFromApiInitial();
@@ -24,7 +26,9 @@ class ChatPage extends StatelessWidget {
             ),
             ChatOptionsWidget(),
             const SizedBox(height: 24),
-            ChatArea(),
+            Expanded(
+              child: ChatArea(),
+            ),
             WriteMessage(),
             ChatSelect(),
           ],
@@ -90,13 +94,10 @@ class ChatSelect extends StatelessWidget {
 }
 
 class ChatArea extends StatelessWidget {
+  final scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
-    final junk = ObservableList();
-    junk.add('hi');
-    junk.add('there');
-    junk.add('my');
-
     final opts = King.of(context).pad.chatOptions;
 
     return Container(
@@ -108,28 +109,45 @@ class ChatArea extends StatelessWidget {
           //bottom: BorderSide(color: Color(0xAAAAAAAA)),
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Observer(
-          builder: (_) {
-            final msgs = King.of(context)
-                .lad
-                .chats
-                .getChatById(opts.selectedChatId)
-                .msgs;
+      child: Scrollbar(
+        controller: scrollController,
+        child: SingleChildScrollView(
+          controller: scrollController,
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Observer(
+              builder: (_) {
+                final msgs = King.of(context)
+                    .lad
+                    .chats
+                    .getChatById(opts.selectedChatId)
+                    .msgs;
 
-            return ListView.separated(
-              shrinkWrap: true,
-              itemCount: msgs.length,
-              //itemCount: junk.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                final msg = msgs[index];
-                return Text(msg.content);
-                //return Text(junk[index]);
+                return ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: msgs.length + 1,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    if (index < msgs.length) {
+                      final msg = msgs[index];
+                      return Text(msg.content);
+                    } else {
+                      Future.delayed(
+                        const Duration(milliseconds: 300),
+                        () => {
+                          scrollController.jumpTo(
+                            scrollController.position.maxScrollExtent,
+                          )
+                        },
+                      );
+                      return const SizedBox.shrink();
+                    }
+                  },
+                );
               },
-            );
-          },
+            ),
+          ),
         ),
       ),
     );
