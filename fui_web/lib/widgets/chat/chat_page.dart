@@ -125,13 +125,14 @@ class ChatArea extends StatelessWidget {
 
                 return ListView.separated(
                   shrinkWrap: true,
+                  reverse: true,
                   itemCount: msgs.length + 1,
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     if (index < msgs.length) {
                       final msg = msgs[index];
-                      return Text(msg.content);
+                      return Text('Msg: ${msg.content}');
                     } else {
                       Future.delayed(
                         const Duration(milliseconds: 300),
@@ -234,6 +235,12 @@ class WriteMessageState extends State<WriteMessage> {
                   refresh();
                 },
                 child: const Text('reload chat'),
+              ),
+              TextButton(
+                onPressed: () {
+                  _textController.text = 'i want to buy a table';
+                },
+                child: const Text('set text'),
               ),
               TextButton(
                 onPressed: () {
