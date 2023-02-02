@@ -16,6 +16,8 @@ class ChatPage extends StatelessWidget {
     return WebScaffold(
       body: Center(
         child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             const Text('Allow us to select between session vs IP user'),
             TextButton(
@@ -27,10 +29,40 @@ class ChatPage extends StatelessWidget {
             ChatOptionsWidget(),
             const SizedBox(height: 24),
             Expanded(
-              child: ChatArea(),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      minWidth: 200,
+                      maxWidth: 300,
+                      minHeight: 800,
+                      maxHeight: 4000,
+                    ),
+                    child: ChatSelect(),
+                  ),
+                  Expanded(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        minWidth: 200,
+                        maxWidth: 500,
+                        minHeight: 800,
+                        maxHeight: 4000,
+                      ),
+                      child: ChatArea(),
+                    ),
+                  ),
+                  //Column(
+                  //children: [
+                  //Expanded(
+                  //child: ChatArea(),
+                  //),
+                  //WriteMessage(),
+                  //],
+                  //),
+                ],
+              ),
             ),
-            WriteMessage(),
-            ChatSelect(),
           ],
         ),
       ),
@@ -60,31 +92,39 @@ class ChatSelect extends StatelessWidget {
             final chatValues = lad.chats.byId.values;
             final chats = ObservableList.of(chatValues);
 
-            return ListView.separated(
-              shrinkWrap: true,
-              itemCount: chats.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                final chat = chats[index];
-                final surfer = lad.surferProxy.getById(chat.surferId);
+            return ConstrainedBox(
+              constraints: const BoxConstraints(
+                minWidth: 300,
+                maxWidth: 900,
+                maxHeight: 4000,
+              ),
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemCount: chats.length,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 12),
+                itemBuilder: (context, index) {
+                  final chat = chats[index];
+                  final surfer = lad.surferProxy.getById(chat.surferId);
 
-                return Observer(
-                  builder: (_) => surfer.phone == ''
-                      ? const SizedBox.shrink()
-                      : TextButton(
-                          onPressed: () {
-                            opts.selectedChatId = chat.chatId;
-                            final testChat = King.of(context)
-                                .lad
-                                .chats
-                                .getChatById(opts.selectedChatId);
+                  return Observer(
+                    builder: (_) => surfer.phone == ''
+                        ? const SizedBox.shrink()
+                        : TextButton(
+                            onPressed: () {
+                              opts.selectedChatId = chat.chatId;
+                              final testChat = King.of(context)
+                                  .lad
+                                  .chats
+                                  .getChatById(opts.selectedChatId);
 
-                            testChat.getNewMsgsByChatIdFromApi();
-                          },
-                          child: Text('chat phone: ${surfer.phone}'),
-                        ),
-                );
-              },
+                              testChat.getNewMsgsByChatIdFromApi();
+                            },
+                            child: Text('chat phone: ${surfer.phone}'),
+                          ),
+                  );
+                },
+              ),
             );
           },
         ),
@@ -123,28 +163,35 @@ class ChatArea extends StatelessWidget {
                     .getChatById(opts.selectedChatId)
                     .msgs;
 
-                return ListView.separated(
-                  shrinkWrap: true,
-                  reverse: true,
-                  itemCount: msgs.length + 1,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 12),
-                  itemBuilder: (context, index) {
-                    if (index < msgs.length) {
-                      final msg = msgs[index];
-                      return Text('Msg: ${msg.content}');
-                    } else {
-                      Future.delayed(
-                        const Duration(milliseconds: 300),
-                        () => {
-                          scrollController.jumpTo(
-                            scrollController.position.maxScrollExtent,
-                          )
-                        },
-                      );
-                      return const SizedBox.shrink();
-                    }
-                  },
+                return ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minWidth: 300,
+                    maxWidth: 900,
+                    maxHeight: 4000,
+                  ),
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    reverse: true,
+                    itemCount: msgs.length + 1,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 12),
+                    itemBuilder: (context, index) {
+                      if (index < msgs.length) {
+                        final msg = msgs[index];
+                        return Text('Msg: ${msg.content}');
+                      } else {
+                        Future.delayed(
+                          const Duration(milliseconds: 300),
+                          () => {
+                            scrollController.jumpTo(
+                              scrollController.position.maxScrollExtent,
+                            )
+                          },
+                        );
+                        return const SizedBox.shrink();
+                      }
+                    },
+                  ),
                 );
               },
             ),

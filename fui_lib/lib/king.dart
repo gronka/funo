@@ -41,7 +41,9 @@ class King {
     if (this.conf.mockAutoSignIn) {
       if (!todd.isSignedIn) {
         Future.delayed(const Duration(milliseconds: 1200), () {
-          this.todd.signInWithEmail(email: '9@9.9', password: 'asdf');
+          this
+              .todd
+              .signInWithEmail(email: 'taylor@gronka.us', password: 'asdf');
         });
       }
     }

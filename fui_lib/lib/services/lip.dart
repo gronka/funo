@@ -226,6 +226,7 @@ class ApiResponse {
       try {
         body = json.decode(response.body);
       } on FormatException catch (e, s) {
+        errored = true;
         king.log.i('FormatException while reading API response');
         print(e);
         print(s);

@@ -93,9 +93,9 @@ class WebScaffold extends StatelessWidget {
                         Flexible(
                           flex: 6,
                           child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                minWidth: minWidth,
-                                maxWidth: maxWidth,
+                              constraints: const BoxConstraints(
+                                minWidth: 300,
+                                maxWidth: 900,
                                 maxHeight: 4000,
                               ),
                               child: body),

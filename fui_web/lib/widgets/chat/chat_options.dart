@@ -25,7 +25,11 @@ class ChatOptionsState extends State<ChatOptionsWidget> {
       children: <Widget>[
         const Text('Conversation for phone #:'),
         const SizedBox(width: 8),
-        Expanded(
+        ConstrainedBox(
+          constraints: const BoxConstraints(
+            minWidth: 100,
+            maxWidth: 140,
+          ),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 14, 8, 14),
             child: TextField(
@@ -37,6 +41,32 @@ class ChatOptionsState extends State<ChatOptionsWidget> {
                   opts.phone = newPhone;
                 }),
           ),
+        ),
+        //
+
+        ConstrainedBox(
+          constraints: const BoxConstraints(
+            minWidth: 100,
+            maxWidth: 140,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 14, 8, 14),
+            child: TextField(
+                controller: _textController,
+                //keyboardType: TextInputType.multiline,
+                //maxLines: 5,
+                minLines: 1,
+                onChanged: (String newName) {
+                  opts.name = newName;
+                }),
+          ),
+        ),
+
+        TextButton(
+          onPressed: () {
+            //refresh();
+          },
+          child: const Text('Add User'),
         ),
       ],
     );

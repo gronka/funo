@@ -9,5 +9,8 @@ abstract class ChatOptionsBase with Store {
   String phone = '';
 
   @observable
+  String name = '';
+
+  @observable
   String selectedChatId = '';
 }
